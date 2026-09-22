@@ -50,32 +50,6 @@ jobs:
           command -v bison
           command -v dtc || true
 
-      - name: Fetch Droidspaces non-GKI patches
-        run: |
-          set -euxo pipefail
-          git clone --depth=1 --filter=blob:none --sparse \
-            https://github.com/ravindu644/Droidspaces-OSS.git \
-            "$RUNNER_TEMP/droidspaces"
-          git -C "$RUNNER_TEMP/droidspaces" sparse-checkout set \
-            Documentation/resources/kernel-patches/non-GKI
-          patch_dir="$RUNNER_TEMP/droidspaces/Documentation/resources/kernel-patches/non-GKI"
-          if test -f net/netfilter/xt_qtaguid.c; then
-            echo "Applying xt_qtaguid compatibility patch"
-            test -s "$patch_dir/01.fix_kernel_panic_in_xt_qtaguid.patch"
-            patch --batch --forward --strip=1 --dry-run < \
-              "$patch_dir/01.fix_kernel_panic_in_xt_qtaguid.patch"
-            patch --batch --forward --strip=1 < \
-              "$patch_dir/01.fix_kernel_panic_in_xt_qtaguid.patch"
-          else
-            echo "xt_qtaguid was removed from this kernel tree; its patch is not applicable."
-          fi
-          echo "Applying cgroup compatibility patch"
-          test -s "$patch_dir/02.fix_restore cgroup file prefix handling .patch"
-          patch --batch --forward --strip=1 --dry-run < \
-            "$patch_dir/02.fix_restore cgroup file prefix handling .patch"
-          patch --batch --forward --strip=1 < \
-            "$patch_dir/02.fix_restore cgroup file prefix handling .patch"
-
       - name: Build merlin kernel
         env:
           ARCH: arm64
