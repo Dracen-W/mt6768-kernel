@@ -1,0 +1,92 @@
+name: Build kernel
+
+on:
+  push:
+    branches:
+      - 6.18-fit-migration
+      - sixteen-qpr2
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: mt6768_defconfig
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout kernel
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            bc \
+            bison \
+            build-essential \
+            flex \
+            libelf-dev \
+            libssl-dev \
+            lld \
+            llvm \
+            pahole \
+            python3 \
+            rsync
+
+      - name: Fetch Droidspaces non-GKI patches
+        run: |
+          git clone --depth=1 --filter=blob:none --sparse \
+            https://github.com/ravindu644/Droidspaces-OSS.git \
+            "$RUNNER_TEMP/droidspaces"
+          git -C "$RUNNER_TEMP/droidspaces" sparse-checkout set \
+            Documentation/resources/kernel-patches/non-GKI
+          patch_dir="$RUNNER_TEMP/droidspaces/Documentation/resources/kernel-patches/non-GKI"
+          if test -f net/netfilter/xt_qtaguid.c; then
+            echo "Applying xt_qtaguid compatibility patch"
+            patch --batch --forward --strip=1 < \
+              "$patch_dir/01.fix_kernel_panic_in_xt_qtaguid.patch"
+          else
+            echo "xt_qtaguid was removed from this kernel tree; its patch is not applicable."
+          fi
+          echo "Applying cgroup compatibility patch"
+          patch --batch --forward --strip=1 < \
+            "$patch_dir/02.fix_restore cgroup file prefix handling .patch"
+
+      - name: Build merlin kernel
+        env:
+          ARCH: arm64
+          LLVM: 1
+          LLVM_IAS: 1
+        run: |
+          make O="$GITHUB_WORKSPACE/out" mt6768_defconfig
+          make O="$GITHUB_WORKSPACE/out" -j"$(nproc)" Image.gz dtbs
+
+      - name: Verify kernel artifacts
+        run: |
+          test -s out/arch/arm64/boot/Image.gz
+          test -s out/arch/arm64/boot/dts/mediatek/mt6769z-xiaomi-merlin.dtb
+
+      - name: Package pure kernel
+        run: |
+          mkdir -p release/kernel/dtb
+          cp out/arch/arm64/boot/Image.gz release/kernel/
+          cp out/arch/arm64/boot/dts/mediatek/mt6769z-xiaomi-merlin.dtb \
+            release/kernel/dtb/
+          cp out/.config release/kernel/
+          tar -C release/kernel -czf release/merlin-kernel-${{ github.sha }}.tar.gz .
+
+      - name: Create Release
+        if: github.event_name != 'pull_request'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            release/merlin-kernel-${{ github.sha }}.tar.gz
+          tag_name: kernel-build-${{ github.sha }}
+          body: |
+            Merlin Android 16 kernel build
+            Commit: ${{ github.sha }}
+          draft: false
+          prerelease: false

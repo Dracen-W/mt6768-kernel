@@ -116,6 +116,8 @@ modules.order
 !.mailmap
 !.pylintrc
 !.rustfmt.toml
+!.github/
+!.github/workflows/
 
 #
 # Generated include files
@@ -123,6 +125,20 @@ modules.order
 /include/config/
 /include/generated/
 /arch/*/include/generated/
+
+# Out-of-tree kernel builds and local release staging
+/out/
+/release/
+/build/
+/dist/
+
+# Local Android boot image inspection and downloaded build tools
+/document by user/
+/boot-unpack/
+/bootimg-tools/
+*.img
+*.img.*
+*.deb
 
 # stgit generated dirs
 patches-*
