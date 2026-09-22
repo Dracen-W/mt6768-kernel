@@ -22,6 +22,7 @@
 
 	chosen {
 		stdout-path = &framebuffer0;
+		/delete-property/ bootargs;
 	};
 
 	framebuffer0: framebuffer@7d9b0000 {
