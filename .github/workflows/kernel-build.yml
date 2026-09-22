@@ -14,7 +14,7 @@ permissions:
 jobs:
   build:
     name: mt6768_defconfig
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout kernel
@@ -22,11 +22,13 @@ jobs:
 
       - name: Install build dependencies
         run: |
+          set -euxo pipefail
           sudo apt-get update
           sudo apt-get install --no-install-recommends -y \
             bc \
             bison \
             build-essential \
+            clang \
             flex \
             libelf-dev \
             libssl-dev \
@@ -36,8 +38,21 @@ jobs:
             python3 \
             rsync
 
+      - name: Validate build toolchain
+        run: |
+          set -euxo pipefail
+          clang --version
+          ld.lld --version
+          clang_major="$(clang --version | sed -n 's/.*version \([0-9][0-9]*\).*/\1/p' | head -n1)"
+          test -n "$clang_major"
+          test "$clang_major" -ge 15
+          command -v flex
+          command -v bison
+          command -v dtc || true
+
       - name: Fetch Droidspaces non-GKI patches
         run: |
+          set -euxo pipefail
           git clone --depth=1 --filter=blob:none --sparse \
             https://github.com/ravindu644/Droidspaces-OSS.git \
             "$RUNNER_TEMP/droidspaces"
@@ -46,12 +61,18 @@ jobs:
           patch_dir="$RUNNER_TEMP/droidspaces/Documentation/resources/kernel-patches/non-GKI"
           if test -f net/netfilter/xt_qtaguid.c; then
             echo "Applying xt_qtaguid compatibility patch"
+            test -s "$patch_dir/01.fix_kernel_panic_in_xt_qtaguid.patch"
+            patch --batch --forward --strip=1 --dry-run < \
+              "$patch_dir/01.fix_kernel_panic_in_xt_qtaguid.patch"
             patch --batch --forward --strip=1 < \
               "$patch_dir/01.fix_kernel_panic_in_xt_qtaguid.patch"
           else
             echo "xt_qtaguid was removed from this kernel tree; its patch is not applicable."
           fi
           echo "Applying cgroup compatibility patch"
+          test -s "$patch_dir/02.fix_restore cgroup file prefix handling .patch"
+          patch --batch --forward --strip=1 --dry-run < \
+            "$patch_dir/02.fix_restore cgroup file prefix handling .patch"
           patch --batch --forward --strip=1 < \
             "$patch_dir/02.fix_restore cgroup file prefix handling .patch"
 
@@ -61,13 +82,20 @@ jobs:
           LLVM: 1
           LLVM_IAS: 1
         run: |
+          set -euxo pipefail
           make O="$GITHUB_WORKSPACE/out" mt6768_defconfig
+          test -s "$GITHUB_WORKSPACE/out/.config"
+          grep -q '^CONFIG_ANDROID_BINDER_IPC=y$' "$GITHUB_WORKSPACE/out/.config"
+          grep -q '^CONFIG_ARCH_MEDIATEK=y$' "$GITHUB_WORKSPACE/out/.config"
           make O="$GITHUB_WORKSPACE/out" -j"$(nproc)" Image.gz dtbs
 
       - name: Verify kernel artifacts
         run: |
+          set -euxo pipefail
           test -s out/arch/arm64/boot/Image.gz
           test -s out/arch/arm64/boot/dts/mediatek/mt6769z-xiaomi-merlin.dtb
+          file out/arch/arm64/boot/Image.gz
+          file out/arch/arm64/boot/dts/mediatek/mt6769z-xiaomi-merlin.dtb
 
       - name: Package pure kernel
         run: |
