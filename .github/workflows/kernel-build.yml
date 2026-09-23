@@ -36,7 +36,8 @@ jobs:
             llvm \
             pahole \
             python3 \
-            rsync
+            rsync \
+            device-tree-compiler
 
       - name: Validate build toolchain
         run: |
@@ -48,7 +49,19 @@ jobs:
           test "$clang_major" -ge 15
           command -v flex
           command -v bison
-          command -v dtc || true
+          command -v dtc
+
+      - name: Validate source and Android configuration
+        run: |
+          set -euxo pipefail
+          git diff --check
+          grep -q '^CONFIG_ANDROID_BINDER_IPC=y$' arch/arm64/configs/mt6768_defconfig
+          grep -q '^CONFIG_ANDROID_BINDERFS=y$' arch/arm64/configs/mt6768_defconfig
+          grep -q '^CONFIG_PSTORE=y$' arch/arm64/configs/mt6768_defconfig
+          grep -q '^CONFIG_PSTORE_CONSOLE=y$' arch/arm64/configs/mt6768_defconfig
+          grep -q '^CONFIG_PSTORE_RAM=y$' arch/arm64/configs/mt6768_defconfig
+          grep -q '^CONFIG_DM_VERITY=y$' arch/arm64/configs/mt6768_defconfig
+          grep -q '^CONFIG_FS_VERITY=y$' arch/arm64/configs/mt6768_defconfig
 
       - name: Build merlin kernel
         env:
@@ -60,6 +73,8 @@ jobs:
           make O="$GITHUB_WORKSPACE/out" mt6768_defconfig
           test -s "$GITHUB_WORKSPACE/out/.config"
           grep -q '^CONFIG_ANDROID_BINDER_IPC=y$' "$GITHUB_WORKSPACE/out/.config"
+          grep -q '^CONFIG_ANDROID_BINDERFS=y$' "$GITHUB_WORKSPACE/out/.config"
+          grep -q '^CONFIG_PSTORE_RAM=y$' "$GITHUB_WORKSPACE/out/.config"
           grep -q '^CONFIG_ARCH_MEDIATEK=y$' "$GITHUB_WORKSPACE/out/.config"
           make O="$GITHUB_WORKSPACE/out" -j"$(nproc)" Image.gz dtbs
 
@@ -70,6 +85,30 @@ jobs:
           test -s out/arch/arm64/boot/dts/mediatek/mt6769z-xiaomi-merlin.dtb
           file out/arch/arm64/boot/Image.gz
           file out/arch/arm64/boot/dts/mediatek/mt6769z-xiaomi-merlin.dtb
+
+      - name: Validate merlin boot DTB
+        run: |
+          set -euxo pipefail
+          dtb="out/arch/arm64/boot/dts/mediatek/mt6769z-xiaomi-merlin.dtb"
+          dts="out/mt6769z-xiaomi-merlin.generated.dts"
+          dtc -I dtb -O dts -o "$dts" "$dtb"
+          grep -q 'bootargs = "clk_ignore_unused"' "$dts"
+          grep -q 'stdout-path = "serial0:921600n8"' "$dts"
+          grep -q 'ramoops@4d010000' "$dts"
+          grep -q 'compatible = "ramoops"' "$dts"
+          grep -q 'memory@40000000' "$dts"
+          if grep -q 'framebuffer@7d9b0000' "$dts"; then
+            echo 'invalid framebuffer reservation is present in merlin DTB' >&2
+            exit 1
+          fi
+
+      - name: Validate boot artifact checksums
+        run: |
+          set -euxo pipefail
+          sha256sum \
+            out/arch/arm64/boot/Image.gz \
+            out/arch/arm64/boot/dts/mediatek/mt6769z-xiaomi-merlin.dtb \
+            out/.config
 
       - name: Package pure kernel
         run: |

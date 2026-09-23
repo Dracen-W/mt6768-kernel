@@ -20,17 +20,8 @@
 	};
 
 	chosen {
-		stdout-path = &framebuffer0;
-		/delete-property/ bootargs;
-	};
-
-	framebuffer0: framebuffer@7d9b0000 {
-		//compatible = "simple-framebuffer";
-		reg = <0x0 0x7d9b0000 0x0 0x2250000>;
-		format = "a8r8g8b8";
-		width = <1080>;
-		stride = <((1080 + 8) * 4)>;
-		height = <2340>;
+		stdout-path = "serial0:921600n8";
+		bootargs = "clk_ignore_unused";
 	};
 
 	memory@40000000 {
@@ -162,11 +153,13 @@
 		#size-cells = <0>;
 
 		port@0 {
+				reg = <0>;
 			usb2phy_port: endpoint {
 				remote-endpoint = <&usb_typec>;
 			};
 		};
 		port@1 {
+				reg = <1>;
 			usb_phy_ep: endpoint {
 				remote-endpoint = <&phy_sw_ep>;
 			};
@@ -400,7 +393,7 @@
             vddio-supply = <&mt6358_vio18_reg>;
 	power-supply = <&mt6358_vio18_reg>;
 
-            //backlight = <&backlight>;
+			backlight = <&backlight>;
             reset-gpios = <&pio 45 GPIO_ACTIVE_HIGH>;
 
             port {

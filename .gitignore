@@ -134,6 +134,8 @@ modules.order
 
 # Local Android boot image inspection and downloaded build tools
 /document by user/
+/crash log/
+/ref from Samsung/
 /boot-unpack/
 /bootimg-tools/
 *.img
