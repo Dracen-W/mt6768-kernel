@@ -92,8 +92,11 @@ jobs:
           dtb="out/arch/arm64/boot/dts/mediatek/mt6769z-xiaomi-merlin.dtb"
           dts="out/mt6769z-xiaomi-merlin.generated.dts"
           dtc -I dtb -O dts -o "$dts" "$dtb"
-          grep -q 'bootargs = "clk_ignore_unused"' "$dts"
           grep -q 'stdout-path = "serial0:921600n8"' "$dts"
+          if grep -q 'bootargs' "$dts"; then
+            echo 'merlin DTB must not inject bootargs; use boot image header cmdline' >&2
+            exit 1
+          fi
           grep -q 'ramoops@4d010000' "$dts"
           grep -q 'compatible = "ramoops"' "$dts"
           grep -q 'memory@40000000' "$dts"
@@ -117,6 +120,18 @@ jobs:
           cp out/arch/arm64/boot/dts/mediatek/mt6769z-xiaomi-merlin.dtb \
             release/kernel/dtb/
           cp out/.config release/kernel/
+          printf '%s\n' \
+            'bootopt=64S3,32N2,64N2' \
+            'androidboot.init_fatal_reboot_target=recovery' \
+            'nodebugmon' \
+            'noirqdebug' \
+            'cgroup.memory=nokmem,nosocket' \
+            'cgroup_disable=pressure' \
+            'pm.sleep_mode=1' \
+            'firmware_class.path=/vendor/firmware' \
+            'vmalloc=400M' \
+            'clk_ignore_unused' \
+            > release/kernel/merlin-bootargs.txt
           tar -C release/kernel -czf release/merlin-kernel-${{ github.sha }}.tar.gz .
 
       - name: Create Release
