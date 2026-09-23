@@ -59,7 +59,9 @@ jobs:
           grep -q '^CONFIG_ANDROID_BINDERFS=y$' arch/arm64/configs/mt6768_defconfig
           grep -q '^CONFIG_PSTORE=y$' arch/arm64/configs/mt6768_defconfig
           grep -q '^CONFIG_PSTORE_CONSOLE=y$' arch/arm64/configs/mt6768_defconfig
+          grep -q '^CONFIG_PSTORE_FTRACE=y$' arch/arm64/configs/mt6768_defconfig
           grep -q '^CONFIG_PSTORE_RAM=y$' arch/arm64/configs/mt6768_defconfig
+          grep -q '^CONFIG_FTRACE=y$' arch/arm64/configs/mt6768_defconfig
           grep -q '^CONFIG_DM_VERITY=y$' arch/arm64/configs/mt6768_defconfig
           grep -q '^CONFIG_FS_VERITY=y$' arch/arm64/configs/mt6768_defconfig
 
@@ -75,6 +77,8 @@ jobs:
           grep -q '^CONFIG_ANDROID_BINDER_IPC=y$' "$GITHUB_WORKSPACE/out/.config"
           grep -q '^CONFIG_ANDROID_BINDERFS=y$' "$GITHUB_WORKSPACE/out/.config"
           grep -q '^CONFIG_PSTORE_RAM=y$' "$GITHUB_WORKSPACE/out/.config"
+          grep -q '^CONFIG_PSTORE_FTRACE=y$' "$GITHUB_WORKSPACE/out/.config"
+          grep -q '^CONFIG_FTRACE=y$' "$GITHUB_WORKSPACE/out/.config"
           grep -q '^CONFIG_ARCH_MEDIATEK=y$' "$GITHUB_WORKSPACE/out/.config"
           make O="$GITHUB_WORKSPACE/out" -j"$(nproc)" Image.gz dtbs
 
@@ -99,6 +103,7 @@ jobs:
           fi
           grep -q 'ramoops@4d010000' "$dts"
           grep -q 'compatible = "ramoops"' "$dts"
+          grep -q 'ftrace-size = <0x10000>' "$dts"
           grep -q 'memory@40000000' "$dts"
           if grep -q 'framebuffer@7d9b0000' "$dts"; then
             echo 'invalid framebuffer reservation is present in merlin DTB' >&2
@@ -130,6 +135,11 @@ jobs:
             'pm.sleep_mode=1' \
             'firmware_class.path=/vendor/firmware' \
             'vmalloc=400M' \
+            'earlycon=mtk8250,0x11002000' \
+            'console=ttyS0,921600n8' \
+            'loglevel=8' \
+            'printk.devkmsg=on' \
+            'log_buf_len=4M' \
             'clk_ignore_unused' \
             > release/kernel/merlin-bootargs.txt
           tar -C release/kernel -czf release/merlin-kernel-${{ github.sha }}.tar.gz .
