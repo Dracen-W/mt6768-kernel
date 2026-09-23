@@ -1291,14 +1291,6 @@
     			clocks = <&infracfg_ao CLK_INFRA_PMIC_AP>,
              			<&infracfg_ao CLK_INFRA_PMIC_TMR>;
     			clock-names = "spi", "wrap";
-
-    			main_pmic: pmic {
-        			compatible = "mediatek,mt6358";
-        			interrupt-controller;
-        			#interrupt-cells = <2>;
-        			interrupt-parent = <&pio>;
-        			interrupts = <144 IRQ_TYPE_LEVEL_HIGH>;
-    			};
 		};
 
 		keyboard: keyboard@10010000 {
