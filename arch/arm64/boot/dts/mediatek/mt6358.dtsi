@@ -12,231 +12,137 @@
 		#interrupt-cells = <2>;
 		mediatek,num-pmic-irqs = <145>;
 		mediatek,pmic-irqs =
-				<INT_VPROC11_OC SP_BUCK>,
-				<INT_VPROC12_OC SP_BUCK>,
-				<INT_VCORE_OC SP_BUCK>,
-				<INT_VGPU_OC SP_BUCK>,
-				<INT_VMODEM_OC SP_BUCK>,
-				<INT_VDRAM1_OC SP_BUCK>,
-				<INT_VS1_OC SP_BUCK>,
-				<INT_VS2_OC SP_BUCK>,
-				<INT_VPA_OC SP_BUCK>,
-				<INT_VCORE_PREOC SP_BUCK>,
-				<INT_VFE28_OC SP_LDO>,
-				<INT_VXO22_OC SP_LDO>,
-				<INT_VRF18_OC SP_LDO>,
-				<INT_VRF12_OC SP_LDO>,
-				<INT_VEFUSE_OC SP_LDO>,
-				<INT_VCN33_OC SP_LDO>,
-				<INT_VCN28_OC SP_LDO>,
-				<INT_VCN18_OC SP_LDO>,
-				<INT_VCAMA1_OC SP_LDO>,
-				<INT_VCAMA2_OC SP_LDO>,
-				<INT_VCAMD_OC SP_LDO>,
-				<INT_VCAMIO_OC SP_LDO>,
-				<INT_VLDO28_OC SP_LDO>,
-				<INT_VA12_OC SP_LDO>,
-				<INT_VAUX18_OC SP_LDO>,
-				<INT_VAUD28_OC SP_LDO>,
-				<INT_VIO28_OC SP_LDO>,
-				<INT_VIO18_OC SP_LDO>,
-				<INT_VSRAM_PROC11_OC SP_LDO>,
-				<INT_VSRAM_PROC12_OC SP_LDO>,
-				<INT_VSRAM_OTHERS_OC SP_LDO>,
-				<INT_VSRAM_GPU_OC SP_LDO>,
-				<INT_VDRAM2_OC SP_LDO>,
-				<INT_VMC_OC SP_LDO>,
-				<INT_VMCH_OC SP_LDO>,
-				<INT_VEMC_OC SP_LDO>,
-				<INT_VSIM1_OC SP_LDO>,
-				<INT_VSIM2_OC SP_LDO>,
-				<INT_VIBR_OC SP_LDO>,
-				<INT_VUSB_OC SP_LDO>,
-				<INT_VBIF28_OC SP_LDO>,
-				<INT_PWRKEY SP_PSC>,
-				<INT_HOMEKEY SP_PSC>,
-				<INT_PWRKEY_R SP_PSC>,
-				<INT_HOMEKEY_R SP_PSC>,
-				<INT_NI_LBAT_INT SP_PSC>,
-				<INT_CHRDET SP_PSC>,
-				<INT_CHRDET_EDGE SP_PSC>,
-				<INT_VCDT_HV_DET SP_PSC>,
-				<INT_RTC SP_SCK>,
-				<INT_FG_BAT0_H SP_BM>,
-				<INT_FG_BAT0_L SP_BM>,
-				<INT_FG_CUR_H SP_BM>,
-				<INT_FG_CUR_L SP_BM>,
-				<INT_FG_ZCV SP_BM>,
-				<INT_FG_BAT1_H SP_BM>,
-				<INT_FG_BAT1_L SP_BM>,
-				<INT_FG_N_CHARGE_L SP_BM>,
-				<INT_FG_IAVG_H SP_BM>,
-				<INT_FG_IAVG_L SP_BM>,
-				<INT_FG_TIME_H SP_BM>,
-				<INT_FG_DISCHARGE SP_BM>,
-				<INT_FG_CHARGE SP_BM>,
-				<INT_BATON_LV SP_BM>,
-				<INT_BATON_HT SP_BM>,
-				<INT_BATON_BAT_IN SP_BM>,
-				<INT_BATON_BAT_OUT SP_BM>,
-				<INT_BIF SP_BM>,
-				<INT_BAT_H SP_HK>,
-				<INT_BAT_L SP_HK>,
-				<INT_BAT2_H SP_HK>,
-				<INT_BAT2_L SP_HK>,
-				<INT_BAT_TEMP_H SP_HK>,
-				<INT_BAT_TEMP_L SP_HK>,
-				<INT_AUXADC_IMP SP_HK>,
-				<INT_NAG_C_DLTV SP_HK>,
-				<INT_AUDIO SP_AUD>,
-				<INT_ACCDET SP_AUD>,
-				<INT_ACCDET_EINT0 SP_AUD>,
-				<INT_ACCDET_EINT1 SP_AUD>,
-				<INT_SPI_CMD_ALERT SP_MISC>;
+				<0 0>, <1 0>, <2 0>, <3 0>, <4 0>,
+				<5 0>, <6 0>, <7 0>, <8 0>, <9 0>,
+				<10 1>, <11 1>, <12 1>, <13 1>, <14 1>,
+				<15 1>, <16 1>, <17 1>, <18 1>, <19 1>,
+				<20 1>, <21 1>, <22 1>, <23 1>, <24 1>,
+				<25 1>, <26 1>, <27 1>, <28 1>, <29 1>,
+				<30 1>, <31 1>, <32 1>, <33 1>, <34 1>,
+				<35 1>, <36 1>, <37 1>, <38 1>, <39 1>,
+				<40 1>, <41 1>, <42 1>, <43 1>, <44 1>,
+				<45 2>, <46 2>, <47 2>, <48 2>, <49 2>,
+				<50 2>, <51 2>, <52 2>, <53 2>, <54 2>,
+				<55 2>, <56 2>, <57 2>, <58 2>, <59 2>,
+				<60 2>, <61 2>, <62 2>, <63 2>, <64 2>,
+				<65 2>, <66 2>, <67 2>, <68 2>, <69 2>,
+				<70 2>, <71 2>, <72 2>, <73 2>, <74 2>,
+				<75 3>, <76 3>, <77 3>, <78 3>, <79 3>,
+				<80 3>, <81 3>, <82 3>, <83 3>, <84 3>,
+				<85 3>, <86 3>, <87 3>, <88 3>, <89 3>,
+				<90 3>, <91 3>, <92 3>, <93 3>, <94 3>,
+				<95 4>, <96 4>, <97 4>, <98 4>, <99 4>,
+				<100 4>, <101 4>, <102 4>, <103 4>, <104 4>,
+				<105 4>, <106 4>, <107 4>, <108 4>, <109 4>,
+				<110 4>, <111 4>, <112 4>, <113 4>, <114 4>,
+				<115 5>, <116 5>, <117 5>, <118 5>, <119 5>,
+				<120 5>, <121 5>, <122 5>, <123 5>, <124 5>,
+				<125 5>, <126 5>, <127 5>, <128 5>, <129 5>,
+				<130 5>, <131 5>, <132 5>, <133 5>, <134 5>,
+				<135 5>, <136 5>, <137 5>, <138 5>, <139 5>,
+				<140 5>, <141 5>, <142 5>, <143 5>, <144 5>;
 		interrupt-names =
-				"vproc11_oc",
-				"vproc12_oc",
-				"vcore_oc",
-				"vgpu_oc",
-				"vmodem_oc",
-				"vdram1_oc",
-				"vs1_oc",
-				"vs2_oc",
-				"vpa_oc",
+				"vproc11_oc", "vproc12_oc", "vcore_oc",
+				"vgpu_oc", "vmodem_oc", "vdram1_oc",
+				"vs1_oc", "vs2_oc", "vpa_oc",
 				"vcore_preoc",
-				"vfe28_oc",
-				"vxo22_oc",
-				"vrf18_oc",
-				"vrf12_oc",
-				"vefuse_oc",
-				"vcn33_oc",
-				"vcn28_oc",
-				"vcn18_oc",
-				"vcama1_oc",
-				"vcama2_oc",
-				"vcamd_oc",
-				"vcamio_oc",
-				"vldo28_oc",
-				"va12_oc",
-				"vaux18_oc",
-				"vaud28_oc",
-				"vio28_oc",
-				"vio18_oc",
-				"vsram_proc11_oc",
-				"vsram_proc12_oc",
-				"vsram_others_oc",
-				"vsram_gpu_oc",
-				"vdram2_oc",
-				"vmc_oc",
-				"vmch_oc",
-				"vemc_oc",
-				"vsim1_oc",
-				"vsim2_oc",
-				"vibr_oc",
-				"vusb_oc",
-				"vbif28_oc",
-				"pwrkey",
-				"homekey",
-				"pwrkey_r",
-				"homekey_r",
-				"ni_lbat_int",
-				"chrdet",
-				"chrdet_edge",
-				"vcdt_hv_det",
+				"vfe28_oc", "vxo22_oc", "vrf18_oc",
+				"vrf12_oc", "vefuse_oc", "vcn33_oc",
+				"vcn28_oc", "vcn18_oc", "vcama1_oc",
+				"vcama2_oc", "vcamd_oc", "vcamio_oc",
+				"vldo28_oc", "va12_oc", "vaux18_oc",
+				"vaud28_oc", "vio28_oc", "vio18_oc",
+				"vsram_proc11_oc", "vsram_proc12_oc",
+				"vsram_others_oc", "vsram_gpu_oc",
+				"vdram2_oc", "vmc_oc", "vmch_oc",
+				"vemc_oc", "vsim1_oc", "vsim2_oc",
+				"vibr_oc", "vusb_oc", "vbif28_oc",
+				"pwrkey", "homekey", "pwrkey_r",
+				"homekey_r", "ni_lbat_int",
+				"chrdet", "chrdet_edge", "vcdt_hv_det",
 				"rtc",
-				"fg_bat0_h",
-				"fg_bat0_l",
-				"fg_cur_h",
-				"fg_cur_l",
-				"fg_zcv",
-				"fg_bat1_h",
-				"fg_bat1_l",
-				"fg_n_charge_l",
-				"fg_iavg_h",
-				"fg_iavg_l",
-				"fg_time_h",
-				"fg_discharge",
-				"fg_charge",
-				"baton_lv",
-				"baton_ht",
-				"baton_bat_in",
-				"baton_bat_out",
-				"bif",
-				"bat_h",
-				"bat_l",
-				"bat2_h",
-				"bat2_l",
-				"bat_temp_h",
-				"bat_temp_l",
-				"auxadc_imp",
-				"nag_c_dltv",
-				"audio",
-				"accdet",
-				"accdet_eint0",
-				"accdet_eint1",
+				"fg_bat0_h", "fg_bat0_l", "fg_cur_h",
+				"fg_cur_l", "fg_zcv", "fg_bat1_h",
+				"fg_bat1_l", "fg_n_charge_l", "fg_iavg_h",
+				"fg_iavg_l", "fg_time_h", "fg_discharge",
+				"fg_charge", "baton_lv", "baton_ht",
+				"baton_bat_in", "baton_bat_out", "bif",
+				"bat_h", "bat_l", "bat2_h", "bat2_l",
+				"bat_temp_h", "bat_temp_l",
+				"auxadc_imp", "nag_c_dltv",
+				"audio", "accdet",
+				"accdet_eint0", "accdet_eint1",
 				"spi_cmd_alert";
 
-		pmic_keys: mt-pmic-keys {
-			compatible = "mediatek,mt-pmic-keys";
-			interrupts = <INT_PWRKEY IRQ_TYPE_LEVEL_HIGH>,
-				     <INT_PWRKEY_R IRQ_TYPE_LEVEL_HIGH>,
-				     <INT_HOMEKEY IRQ_TYPE_LEVEL_HIGH>,
-				     <INT_HOMEKEY_R IRQ_TYPE_LEVEL_HIGH>;
+		pmic_keys: mt-pmic {
+			compatible = "mediatek,mt-pmic";
+			interrupts = <45 IRQ_TYPE_LEVEL_HIGH>,
+				     <47 IRQ_TYPE_LEVEL_HIGH>,
+				     <46 IRQ_TYPE_LEVEL_HIGH>,
+				     <48 IRQ_TYPE_LEVEL_HIGH>,
+				     <81 IRQ_TYPE_LEVEL_HIGH>,
+				     <82 IRQ_TYPE_LEVEL_HIGH>,
+				     <53 IRQ_TYPE_LEVEL_HIGH>,
+				     <54 IRQ_TYPE_LEVEL_HIGH>;
 			interrupt-names = "pwrkey",
 					  "pwrkey_r",
 					  "homekey",
-					  "homekey_r";
+					  "homekey_r",
+					  "bat_h",
+					  "bat_l",
+					  "fg_cur_h",
+					  "fg_cur_l";
 		};
 
-		pmic_auxadc: mt635x-auxadc {
+		pmic_adc: adc {
 			compatible = "mediatek,mt6358-auxadc";
 			#io-channel-cells = <1>;
 
 			batadc {
-				channel = <AUXADC_BATADC>;
+				channel = <0>;
 				resistance-ratio = <3 1>;
 				avg-num = <128>;
 			};
 			vcdt {
-				channel = <AUXADC_VCDT>;
+				channel = <1>;
 			};
 			bat_temp {
-				channel = <AUXADC_BAT_TEMP>;
+				channel = <2>;
 				resistance-ratio = <2 1>;
 			};
 			chip_temp {
-				channel = <AUXADC_CHIP_TEMP>;
+				channel = <3>;
 			};
 			vcore_temp {
-				channel = <AUXADC_VCORE_TEMP>;
+				channel = <4>;
 			};
 			vproc_temp {
-				channel = <AUXADC_VPROC_TEMP>;
+				channel = <5>;
 			};
 			vgpu_temp {
-				channel = <AUXADC_VGPU_TEMP>;
+				channel = <6>;
 			};
 			accdet {
-				channel = <AUXADC_ACCDET>;
+				channel = <7>;
 			};
 			dcxo_volt {
-				channel = <AUXADC_VDCXO>;
+				channel = <8>;
 				resistance-ratio = <3 2>;
 			};
 			tsx_temp {
-				channel = <AUXADC_TSX_TEMP>;
+				channel = <9>;
 				avg-num = <128>;
 			};
 			hpofs_cal {
-				channel = <AUXADC_HPOFS_CAL>;
+				channel = <10>;
 				avg-num = <256>;
 			};
 			dcxo_temp {
-				channel = <AUXADC_DCXO_TEMP>;
+				channel = <11>;
 				avg-num = <16>;
 			};
 			vbif {
-				channel = <AUXADC_VBIF>;
+				channel = <12>;
 				resistance-ratio = <2 1>;
 			};
 		};
@@ -562,27 +468,10 @@
 				regulator-max-microvolt = <3100000>;
 				regulator-enable-ramp-delay = <540>;
 			};
-
-			mt6358_va09_reg: ldo_va09 {
-				regulator-name = "va09";
-				regulator-min-microvolt = <900000>;
-				regulator-max-microvolt = <900000>;
-				regulator-enable-ramp-delay = <264>;
-				regulator-boot-on;
-			};
 		};
 
 		mt6358rtc: rtc {
 			compatible = "mediatek,mt6358-rtc";
-			base = <0x580>;
-			apply-lpsd-solution;
-		};
-
-		mt6358misc: misc {
-			compatible = "mediatek,mt6358-misc";
-			base = <0x580>;
-			apply-lpsd-solution;
-			dcxo-switch;
 		};
 
 		mt6358keys: keys {
