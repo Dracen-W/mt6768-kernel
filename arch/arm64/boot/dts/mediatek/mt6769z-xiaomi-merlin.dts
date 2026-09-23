@@ -21,7 +21,7 @@
 
 	chosen {
 		stdout-path = "serial0:921600n8";
-		bootargs = "root=/dev/ram rw rootwait vmalloc=400M firmware_class.path=/vendor/firmware cgroup.memory=nosocket,nokmem androidboot.bootdevice=bootdevice androidboot.hardware=mt6768 androidboot.selinux=permissive androidboot.veritymode=disabled androidboot.init_fatal_reboot_target=recovery clk_ignore_unused";
+		/delete-property/ bootargs;
 	};
 
 	memory@40000000 {
