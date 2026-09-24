@@ -61,6 +61,12 @@ jobs:
           grep -q '^CONFIG_PSTORE_CONSOLE=y$' arch/arm64/configs/mt6768_defconfig
           grep -q '^CONFIG_PSTORE_FTRACE=y$' arch/arm64/configs/mt6768_defconfig
           grep -q '^CONFIG_PSTORE_RAM=y$' arch/arm64/configs/mt6768_defconfig
+          grep -q '^CONFIG_SECURITY_NETWORK=y$' arch/arm64/configs/mt6768_defconfig
+          grep -q '^CONFIG_SECURITY_SELINUX=y$' arch/arm64/configs/mt6768_defconfig
+          grep -q '^CONFIG_MFD_MT6397=y$' arch/arm64/configs/mt6768_defconfig
+          grep -q '^CONFIG_REGULATOR_MT6358=y$' arch/arm64/configs/mt6768_defconfig
+          grep -q '^CONFIG_MTK_PMIC_WRAP=y$' arch/arm64/configs/mt6768_defconfig
+          grep -q '^CONFIG_MMC_MTK=y$' arch/arm64/configs/mt6768_defconfig
           grep -q '^CONFIG_FTRACE=y$' arch/arm64/configs/mt6768_defconfig
           grep -q '^CONFIG_DM_VERITY=y$' arch/arm64/configs/mt6768_defconfig
           grep -q '^CONFIG_FS_VERITY=y$' arch/arm64/configs/mt6768_defconfig
@@ -81,6 +87,14 @@ jobs:
           grep -q '^CONFIG_PSTORE_PMSG=y$' "$GITHUB_WORKSPACE/out/.config"
           grep -q '^CONFIG_PSTORE_RAM=y$' "$GITHUB_WORKSPACE/out/.config"
           grep -q '^CONFIG_PSTORE_FTRACE=y$' "$GITHUB_WORKSPACE/out/.config"
+          grep -q '^CONFIG_SECURITY_NETWORK=y$' "$GITHUB_WORKSPACE/out/.config"
+          grep -q '^CONFIG_SECURITY_SELINUX=y$' "$GITHUB_WORKSPACE/out/.config"
+          grep -q '^CONFIG_DEFAULT_SECURITY_SELINUX=y$' "$GITHUB_WORKSPACE/out/.config"
+          grep -q '^CONFIG_LSM=.*selinux' "$GITHUB_WORKSPACE/out/.config"
+          grep -q '^CONFIG_MFD_MT6397=y$' "$GITHUB_WORKSPACE/out/.config"
+          grep -q '^CONFIG_REGULATOR_MT6358=y$' "$GITHUB_WORKSPACE/out/.config"
+          grep -q '^CONFIG_MTK_PMIC_WRAP=y$' "$GITHUB_WORKSPACE/out/.config"
+          grep -q '^CONFIG_MMC_MTK=y$' "$GITHUB_WORKSPACE/out/.config"
           grep -q '^CONFIG_FTRACE=y$' "$GITHUB_WORKSPACE/out/.config"
           grep -q '^CONFIG_ARCH_MEDIATEK=y$' "$GITHUB_WORKSPACE/out/.config"
           make O="$GITHUB_WORKSPACE/out" -j"$(nproc)" Image.gz dtbs
