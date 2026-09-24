@@ -76,6 +76,9 @@ jobs:
           test -s "$GITHUB_WORKSPACE/out/.config"
           grep -q '^CONFIG_ANDROID_BINDER_IPC=y$' "$GITHUB_WORKSPACE/out/.config"
           grep -q '^CONFIG_ANDROID_BINDERFS=y$' "$GITHUB_WORKSPACE/out/.config"
+          grep -q '^CONFIG_PSTORE=y$' "$GITHUB_WORKSPACE/out/.config"
+          grep -q '^CONFIG_PSTORE_CONSOLE=y$' "$GITHUB_WORKSPACE/out/.config"
+          grep -q '^CONFIG_PSTORE_PMSG=y$' "$GITHUB_WORKSPACE/out/.config"
           grep -q '^CONFIG_PSTORE_RAM=y$' "$GITHUB_WORKSPACE/out/.config"
           grep -q '^CONFIG_PSTORE_FTRACE=y$' "$GITHUB_WORKSPACE/out/.config"
           grep -q '^CONFIG_FTRACE=y$' "$GITHUB_WORKSPACE/out/.config"
@@ -89,6 +92,21 @@ jobs:
           test -s out/arch/arm64/boot/dts/mediatek/mt6769z-xiaomi-merlin.dtb
           file out/arch/arm64/boot/Image.gz
           file out/arch/arm64/boot/dts/mediatek/mt6769z-xiaomi-merlin.dtb
+          python3 - "$GITHUB_WORKSPACE/out/arch/arm64/boot/Image.gz" "${GITHUB_SHA:0:12}" <<'PY'
+          import gzip
+          import re
+          import sys
+
+          image = gzip.open(sys.argv[1], "rb").read()
+          match = re.search(rb"Linux version ([^\s]+)", image)
+          if not match:
+              raise SystemExit("Image.gz has no embedded Linux version string")
+          version = match.group(1).decode()
+          expected = "g" + sys.argv[2]
+          if expected not in version:
+              raise SystemExit(f"kernel version {version!r} does not identify this build ({expected})")
+          print(f"verified kernel build identity: {version}")
+          PY
 
       - name: Validate merlin boot DTB
         run: |
@@ -103,7 +121,14 @@ jobs:
           fi
           grep -q 'ramoops@4d010000' "$dts"
           grep -q 'compatible = "ramoops"' "$dts"
+          grep -q '#address-cells = <0x02>' "$dts"
+          grep -q '#size-cells = <0x02>' "$dts"
+          grep -q 'ranges;' "$dts"
+          grep -q 'record-size = <0x20000>' "$dts"
+          grep -q 'console-size = <0x40000>' "$dts"
           grep -q 'ftrace-size = <0x10000>' "$dts"
+          grep -q 'pmsg-size = <0x10000>' "$dts"
+          grep -q 'max-reason = <0x02>' "$dts"
           grep -q 'memory@40000000' "$dts"
           python3 - "$dts" <<'PY'
           import pathlib
