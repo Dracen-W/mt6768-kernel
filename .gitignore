@@ -136,6 +136,7 @@ modules.order
 /document by user/
 /crash log/
 /ref from Samsung/
+chathistory.txt
 /boot-unpack/
 /bootimg-tools/
 *.img
@@ -201,4 +202,4 @@ sphinx_*/
 
 # Rust analyzer configuration
 /rust-project.json
-chathistory.txt
+
