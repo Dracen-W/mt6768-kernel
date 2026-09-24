@@ -33,7 +33,7 @@
 		ramoops@4d010000 {
 			compatible = "ramoops";
 			reg = <0x0 0x4d010000 0x0 0xe0000>;
-				no-map;
+			no-map;
 			record-size = <0x20000>;
 			console-size = <0x40000>;
 			ftrace-size = <0x10000>;

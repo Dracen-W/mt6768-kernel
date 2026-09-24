@@ -105,6 +105,20 @@ jobs:
           grep -q 'compatible = "ramoops"' "$dts"
           grep -q 'ftrace-size = <0x10000>' "$dts"
           grep -q 'memory@40000000' "$dts"
+          python3 - "$dts" <<'PY'
+          import pathlib
+          import sys
+
+          dts = pathlib.Path(sys.argv[1]).read_text()
+          start = dts.find("pwrap@1000d000 {")
+          end = dts.find("\n\t\t};", start)
+          if start < 0 or end < 0:
+              raise SystemExit("pwrap node missing or malformed in merlin DTB")
+          pwrap = dts[start:end]
+          if 'compatible = "mediatek,mt6358";' not in pwrap:
+              raise SystemExit("pwrap must contain its MT6358 PMIC child")
+          print("validated MT6768 PWRAP -> MT6358 PMIC hierarchy")
+          PY
           if grep -q 'framebuffer@7d9b0000' "$dts"; then
             echo 'invalid framebuffer reservation is present in merlin DTB' >&2
             exit 1

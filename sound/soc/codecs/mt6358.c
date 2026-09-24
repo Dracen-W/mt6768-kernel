@@ -2383,6 +2383,11 @@ static int mt6358_platform_driver_probe(struct platform_device *pdev)
 	struct mt6358_priv *priv;
 	struct mt6397_chip *mt6397 = dev_get_drvdata(pdev->dev.parent);
 
+	/* The codec is an MFD child and requires the PMIC parent's regmap. */
+	if (!mt6397)
+		return dev_err_probe(&pdev->dev, -EPROBE_DEFER,
+				     "PMIC parent driver is not ready\n");
+
 	priv = devm_kzalloc(&pdev->dev,
 			    sizeof(struct mt6358_priv),
 			    GFP_KERNEL);
